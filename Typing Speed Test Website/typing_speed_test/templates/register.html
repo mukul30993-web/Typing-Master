@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Register - Typing Master</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(
+        135deg,
+        #020617,
+        #0f172a,
+        #1e293b
+    );
+}
+
+.register-box{
+    width:420px;
+    background:rgba(15,23,42,0.95);
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 0 30px rgba(56,189,248,0.3);
+}
+
+.register-box h1{
+    color:#38bdf8;
+    margin-bottom:25px;
+}
+
+.input-box{
+    margin-bottom:15px;
+}
+
+.input-box input{
+    width:100%;
+    padding:14px;
+    border:none;
+    outline:none;
+    border-radius:10px;
+    background:#1e293b;
+    color:white;
+    font-size:16px;
+}
+
+.error{
+    color:#ff4d4d;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+
+.register-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#0ea5e9;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.register-btn:hover{
+    background:#0284c7;
+}
+
+.login-link{
+    margin-top:20px;
+    color:white;
+}
+
+.login-link a{
+    color:#38bdf8;
+    text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="register-box">
+
+    <h1>📝 Create Account</h1>
+
+    <form method="POST">
+
+        <div class="input-box">
+            <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                required>
+        </div>
+
+        <div class="input-box">
+            <input
+                type="email"
+                name="email"
+                placeholder="Gmail Address"
+                required>
+        </div>
+
+        <div class="input-box">
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required>
+        </div>
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <button class="register-btn" type="submit">
+            Register
+        </button>
+
+    </form>
+
+    <div class="login-link">
+        Already have an account?
+        <a href="/login">Login</a>
+    </div>
+
+</div>
+
+</body>
+</html>

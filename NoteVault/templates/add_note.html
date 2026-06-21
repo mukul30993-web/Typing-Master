@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Note — NoteVault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #0F172A; color: #E2E8F0; min-height: 100vh; }
+
+    nav { background: #1E293B; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; text-decoration: none; color: #E2E8F0; }
+    .logo-icon { width: 32px; height: 32px; background: #7C3AED; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .nav-home { color: #94A3B8; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; transition: background 0.15s; }
+    .nav-home:hover { background: #293548; color: #E2E8F0; }
+
+    main { max-width: 620px; margin: 0 auto; padding: 40px 24px; }
+    .back { display: inline-flex; align-items: center; gap: 6px; color: #94A3B8; text-decoration: none; font-size: 14px; margin-bottom: 24px; transition: color 0.15s; }
+    .back:hover { color: #E2E8F0; }
+
+    h1 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .sub { font-size: 14px; color: #94A3B8; margin-bottom: 28px; }
+
+    .tip { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.25); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #C4B5FD; margin-bottom: 24px; display: flex; gap: 8px; }
+
+    .card { background: #1E293B; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 28px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+    input, textarea { width: 100%; background: #293548; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 14px; font-family: 'Inter', sans-serif; font-size: 15px; color: #E2E8F0; outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+    input::placeholder, textarea::placeholder { color: #475569; }
+    input:focus, textarea:focus { border-color: #7C3AED; box-shadow: 0 0 0 3px rgba(124,58,237,0.2); }
+    textarea { resize: vertical; min-height: 160px; line-height: 1.7; }
+    .char { font-size: 11px; color: #475569; text-align: right; margin-top: 4px; }
+
+    hr { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 24px 0; }
+    .actions { display: flex; gap: 12px; }
+    .btn-primary { background: #7C3AED; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.15s; }
+    .btn-primary:hover { background: #6D28D9; }
+    .btn-ghost { background: #293548; color: #94A3B8; border: 1px solid rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: background 0.15s; }
+    .btn-ghost:hover { background: #1E293B; color: #E2E8F0; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-icon">📓</div> NoteVault</a>
+  <a href="/" class="nav-home">← Home</a>
+</nav>
+
+<main>
+  <a href="/" class="back">← Back to notes</a>
+  <h1>New Note</h1>
+  <p class="sub">Capture your thought before it slips away.</p>
+
+  <div class="tip">💡 Give your note a clear title so you can find it easily later.</div>
+
+  <div class="card">
+    <form method="POST" action="/add">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" placeholder="e.g. Meeting notes, Project idea…" required autofocus maxlength="120" oninput="document.getElementById('tc').textContent=this.value.length+' / 120'"/>
+        <div class="char" id="tc">0 / 120</div>
+      </div>
+      <div class="form-group">
+        <label for="content">Content</label>
+        <textarea id="content" name="content" placeholder="Write anything — ideas, to-dos, summaries…" required rows="7" oninput="document.getElementById('cc').textContent=this.value.length+' / 2000'"></textarea>
+        <div class="char" id="cc">0 / 2000</div>
+      </div>
+      <hr/>
+      <div class="actions">
+        <button type="submit" class="btn-primary">💾 Save Note</button>
+        <a href="/" class="btn-ghost">✕ Cancel</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+</body>
+</html>
