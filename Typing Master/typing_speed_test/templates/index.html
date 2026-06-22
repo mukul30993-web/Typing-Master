@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Master</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <div class="logo">
+            ⌨ Typing Master
+        </div>
+
+        <div class="nav-links">
+            <a href="/">🏠 Home</a>
+            <a href="/profile">👤 Profile</a>
+            <a href="/leaderboard">🏆 Leaderboard</a>
+            <a href="/login">🔑 Login</a>
+            <a href="/logout">🚪 Logout</a>
+        </div>
+
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <h1>⌨️ Typing Master</h1>
+
+        <!-- Username Input -->
+        <div class="user-section">
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter Your Name"
+                autocomplete="off">
+
+            <!-- Error Message -->
+            <p id="nameError" class="error-message"></p>
+
+            <button
+                type="button"
+                onclick="saveName()">
+
+                ✅ Enter Name
+
+            </button>
+
+        </div>
+
+        <!-- Text To Type -->
+        <div id="textBox" class="text-box"></div>
+
+        <!-- Typing Area -->
+        <textarea
+            id="typingInput"
+            rows="8"
+            placeholder="Start typing here..."
+            autocomplete="off"
+            spellcheck="false"></textarea>
+
+        <!-- Statistics -->
+        <div class="stats">
+
+            <div class="stat-card">
+                <h3>⏱ Time</h3>
+                <p><span id="timer">60</span>s</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>⚡ WPM</h3>
+                <p><span id="wpm">0</span></p>
+            </div>
+
+            <div class="stat-card">
+                <h3>❌ Mistakes</h3>
+                <p><span id="mistakes">0</span></p>
+            </div>
+
+        </div>
+
+        <!-- Result -->
+        <div id="result" class="result-box">
+            Enter your name and click Enter Name.
+        </div>
+
+        <!-- Restart Button -->
+        <div class="buttons">
+            <button onclick="restartTest()">
+                🔄 Restart Test
+            </button>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>s
