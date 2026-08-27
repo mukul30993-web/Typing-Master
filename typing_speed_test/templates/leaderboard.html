@@ -1,46 +1,285 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Leaderboard</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View the top typists on Typing Master leaderboard">
+    <title>Leaderboard - Typing Master</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
 </head>
+
 <body>
 
-<nav class="navbar">
-    <div class="logo">⌨ Typing Master</div>
+    <!-- NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo">
+            <span class="logo-icon">⌨</span>
+            <span class="logo-text">Typing Master</span>
+        </div>
 
-    <div class="nav-links">
-        <a href="/">🏠 Home</a>
-        <a href="/profile">👤 Profile</a>
-        <a href="/leaderboard">🏆 Leaderboard</a>
-    </div>
-</nav>
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
 
-<div class="container">
+        <div class="nav-links">
+            <a href="/" class="nav-link">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="/profile" class="nav-link">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="/leaderboard" class="nav-link active">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+        </div>
+    </nav>
 
-    <h1>🏆 Global Leaderboard</h1>
+    <!-- MAIN CONTAINER -->
+    <main class="container" role="main">
+        
+        <header class="header-section">
+            <h1 class="main-title">
+                <span class="title-icon">🏆</span>
+                Global Leaderboard
+            </h1>
+            <p class="subtitle">Compete with the best typists around the world</p>
+        </header>
 
-    <table class="leaderboard-table">
+        <!-- Filter Options -->
+        <section class="filter-section" aria-label="Leaderboard filters">
+            <div class="filter-buttons">
+                <button class="btn btn-filter active" data-filter="all">
+                    🌍 All Time
+                </button>
+                <button class="btn btn-filter" data-filter="monthly">
+                    📅 This Month
+                </button>
+                <button class="btn btn-filter" data-filter="weekly">
+                    📆 This Week
+                </button>
+                <button class="btn btn-filter" data-filter="daily">
+                    ☀️ Today
+                </button>
+            </div>
+            
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="🔍 Search username..." 
+                    autocomplete="off"
+                    aria-label="Search leaderboard">
+            </div>
+        </section>
 
-        <tr>
-            <th>Rank</th>
-            <th>Username</th>
-            <th>Best WPM</th>
-        </tr>
+        <!-- Top 3 Podium -->
+        {% if data|length >= 3 %}
+        <section class="podium-section" aria-label="Top 3 typists">
+            <div class="podium">
+                <!-- 2nd Place -->
+                <div class="podium-item second-place">
+                    <div class="podium-rank">🥈</div>
+                    <div class="podium-avatar">
+                        {{ data[1][0][0]|upper }}
+                    </div>
+                    <div class="podium-name">{{ data[1][0] }}</div>
+                    <div class="podium-wpm">{{ data[1][1] }} WPM</div>
+                    <div class="podium-bar"></div>
+                </div>
 
-        {% for row in data %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-        </tr>
-        {% endfor %}
+                <!-- 1st Place -->
+                <div class="podium-item first-place">
+                    <div class="podium-crown">👑</div>
+                    <div class="podium-rank">🥇</div>
+                    <div class="podium-avatar">
+                        {{ data[0][0][0]|upper }}
+                    </div>
+                    <div class="podium-name">{{ data[0][0] }}</div>
+                    <div class="podium-wpm">{{ data[0][1] }} WPM</div>
+                    <div class="podium-bar"></div>
+                </div>
 
-    </table>
+                <!-- 3rd Place -->
+                <div class="podium-item third-place">
+                    <div class="podium-rank">🥉</div>
+                    <div class="podium-avatar">
+                        {{ data[2][0][0]|upper }}
+                    </div>
+                    <div class="podium-name">{{ data[2][0] }}</div>
+                    <div class="podium-wpm">{{ data[2][1] }} WPM</div>
+                    <div class="podium-bar"></div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
 
-</div>
+        <!-- Leaderboard Table -->
+        <section class="leaderboard-section" aria-label="Full leaderboard">
+            <div class="table-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">Rank</th>
+                            <th class="user-col">Username</th>
+                            <th class="wpm-col">Best WPM</th>
+                            <th class="accuracy-col">Accuracy</th>
+                            <th class="tests-col">Tests</th>
+                            <th class="date-col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        {% for row in data %}
+                        <tr class="leaderboard-row" data-username="{{ row[0]|lower }}">
+                            <td class="rank-cell">
+                                {% if loop.index == 1 %}
+                                    <span class="rank-badge gold">🥇</span>
+                                {% elif loop.index == 2 %}
+                                    <span class="rank-badge silver">🥈</span>
+                                {% elif loop.index == 3 %}
+                                    <span class="rank-badge bronze">🥉</span>
+                                {% else %}
+                                    <span class="rank-number">{{ loop.index }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="user-cell">
+                                <div class="user-info">
+                                    <div class="user-avatar">
+                                        {{ row[0][0]|upper }}
+                                    </div>
+                                    <span class="user-name">{{ row[0] }}</span>
+                                </div>
+                            </td>
+                            <td class="wpm-cell">
+                                <span class="wpm-value">{{ row[1] }}</span>
+                                <span class="wpm-label">WPM</span>
+                            </td>
+                            <td class="accuracy-cell">
+                                {% if row[2] is defined %}
+                                    <div class="accuracy-bar">
+                                        <div class="accuracy-fill" style="width: {{ row[2] }}%"></div>
+                                        <span class="accuracy-text">{{ row[2] }}%</span>
+                                    </div>
+                                {% else %}
+                                    <span class="accuracy-text">--</span>
+                                {% endif %}
+                            </td>
+                            <td class="tests-cell">
+                                {% if row[3] is defined %}
+                                    {{ row[3] }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </td>
+                            <td class="date-cell">
+                                {% if row[4] is defined %}
+                                    {{ row[4] }}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr class="empty-row">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📭</div>
+                                    <p class="empty-text">No records yet. Be the first!</p>
+                                    <a href="/" class="btn btn-primary">Start Typing</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Stats Summary -->
+        <section class="stats-summary" aria-label="Leaderboard statistics">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-icon">👥</div>
+                    <div class="summary-content">
+                        <h3 class="summary-value">{{ data|length }}</h3>
+                        <p class="summary-label">Total Players</p>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">⚡</div>
+                    <div class="summary-content">
+                        <h3 class="summary-value">
+                            {% if data %}{{ data[0][1] }}{% else %}0{% endif %}
+                        </h3>
+                        <p class="summary-label">Highest WPM</p>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">📊</div>
+                    <div class="summary-content">
+                        <h3 class="summary-value">
+                            {% if data %}
+                                {{ (data|map(attribute=1)|sum / data|length)|round(1) }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </h3>
+                        <p class="summary-label">Average WPM</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Refresh Button -->
+        <section class="action-section">
+            <button onclick="refreshLeaderboard()" class="btn btn-secondary">
+                <span class="btn-icon">🔄</span>
+                <span class="btn-text">Refresh</span>
+            </button>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <p>&copy; 2024 Typing Master. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.leaderboard-row');
+            
+            rows.forEach(row => {
+                const username = row.getAttribute('data-username');
+                if (username.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter buttons
+        document.querySelectorAll('.btn-filter').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Add filter logic here
+            });
+        });
+
+        // Refresh leaderboard
+        function refreshLeaderboard() {
+            location.reload();
+        }
+    </script>
 
 </body>
 </html>

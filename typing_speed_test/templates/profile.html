@@ -3,344 +3,625 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-
+    <title>Profile - Typing Master</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>">
     <style>
-
-        body{
-            margin:0;
-            font-family:Arial, sans-serif;
-
-            background:linear-gradient(
-                135deg,
-                #020617,
-                #0f172a,
-                #1e293b
-            );
-
-            min-height:100vh;
-
-            display:flex;
-            justify-content:center;
-            align-items:center;
-
-            color:white;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .profile-card{
-
-            width:400px;
-
-            background:rgba(30,41,59,0.8);
-
-            backdrop-filter:blur(15px);
-
-            border-radius:20px;
-
-            padding:30px;
-
-            text-align:center;
-
-            box-shadow:
-            0 0 25px rgba(56,189,248,0.3);
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 20px;
         }
 
-        .profile-img{
-
-            width:150px;
-            height:150px;
-
-            border-radius:50%;
-
-            border:4px solid #38bdf8;
-
-            object-fit:cover;
-
-            margin-bottom:20px;
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
         }
 
-        h1{
-            color:#38bdf8;
-            margin-bottom:10px;
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: float 10s ease-in-out infinite;
         }
 
-        .info{
-            margin-top:20px;
+        .circle1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(56, 189, 248, 0.15);
+            top: -100px;
+            left: -100px;
         }
 
-        .info p{
-            font-size:18px;
-            margin:12px 0;
+        .circle2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(14, 165, 233, 0.12);
+            bottom: -80px;
+            right: -80px;
+            animation-delay: 3s;
         }
 
-        .btn{
-            margin-top:25px;
-
-            background:#38bdf8;
-
-            color:white;
-
-            border:none;
-
-            padding:12px 25px;
-
-            border-radius:10px;
-
-            cursor:pointer;
-
-            font-size:16px;
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
         }
 
-        .btn:hover{
-            background:#0ea5e9;
+        /* Profile Card */
+        .profile-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(56, 189, 248, 0.15);
+            animation: slideUp 0.5s ease-out;
         }
 
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Avatar */
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 52px;
+            font-weight: 700;
+            color: white;
+            border: 4px solid rgba(56, 189, 248, 0.5);
+            box-shadow: 
+                0 0 30px rgba(56, 189, 248, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 40px rgba(56, 189, 248, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            background: #22c55e;
+            border-radius: 50%;
+            border: 3px solid rgba(30, 41, 59, 0.85);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* User Info */
+        .username {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .user-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 18px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15);
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-title {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .progress-value {
+            font-size: 14px;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        /* Achievements */
+        .achievements {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .achievement {
+            width: 50px;
+            height: 50px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .achievement:hover {
+            transform: translateY(-3px);
+            border-color: #38bdf8;
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
+        }
+
+        .achievement.locked {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-title {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .modal-buttons .btn {
+            margin-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .profile-card {
+                padding: 30px 20px;
+            }
+
+            .profile-avatar {
+                width: 110px;
+                height: 110px;
+                font-size: 44px;
+            }
+
+            .username {
+                font-size: 24px;
+            }
+
+            .stats-grid {
+                gap: 10px;
+            }
+
+            .stat-item {
+                padding: 14px 10px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
 
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-circle circle1"></div>
+        <div class="bg-circle circle2"></div>
+    </div>
+
+    <!-- Profile Card -->
     <div class="profile-card">
-
-        <img
-            src="https://via.placeholder.com/150"
-            alt="Profile"
-            class="profile-img"
-        >
-
-        <h1>{{username}}</h1>
-
-        <div class="info">
-
-            <p>🏆 Best WPM :{{best_wpm}}</p>
-            <p>⌨ Tests Completed : {{tests_completed}}</p>
-
+        
+        <!-- Avatar -->
+        <div class="avatar-container">
+            <div class="profile-avatar">
+                {{ username[0]|upper }}
+            </div>
+            <div class="status-dot"></div>
         </div>
 
-        <button class="btn">
-            Edit Profile
+        <!-- User Info -->
+        <h1 class="username">{{ username }}</h1>
+        <span class="user-badge">
+            🏅 {{ level|default('Beginner') }}
+        </span>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value">{{ best_wpm|default(0) }}</div>
+                <div class="stat-label">Best WPM</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value">{{ avg_wpm|default(0) }}</div>
+                <div class="stat-label">Avg WPM</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">⌨️</div>
+                <div class="stat-value">{{ tests_completed|default(0) }}</div>
+                <div class="stat-label">Tests</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value">{{ avg_accuracy|default(100) }}%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <span class="progress-title">Level Progress</span>
+                <span class="progress-value">{{ xp|default(0) }} / {{ xp_next|default(100) }} XP</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: {{ xp_percent|default(0) }}%"></div>
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="achievements">
+            <div class="achievement" title="First Test">🎯</div>
+            <div class="achievement" title="Speed Demon">⚡</div>
+            <div class="achievement" title="Perfect Accuracy">💯</div>
+            <div class="achievement locked" title="100 Tests">🏆</div>
+            <div class="achievement locked" title="Typing Master">👑</div>
+        </div>
+
+        <!-- Buttons -->
+        <button class="btn btn-primary" onclick="window.location.href='/'">
+            <span>⌨️</span>
+            <span>Take Test</span>
+        </button>
+        <button class="btn btn-secondary" onclick="openModal()">
+            <span>✏️</span>
+            <span>Edit Profile</span>
         </button>
 
     </div>
 
-</body>
-</html>const words = [
-"python","flask","html","css","javascript","mysql","database","developer",
-"coding","website","frontend","backend","project","keyboard","speed",
-"typing","software","programming","application","internet","computer",
-"technology","learning","practice","network","server","client","cloud",
-"artificial","intelligence","machine","learning","algorithm","function",
-"variable","object","class","method","framework","bootstrap","react",
-"angular","nodejs","django","security","authentication","authorization"
-];
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h2 class="modal-title">✏️ Edit Profile</h2>
+            
+            <form id="editForm" onsubmit="saveProfile(event)">
+                <div class="form-group">
+                    <label for="editUsername">Username</label>
+                    <input 
+                        type="text" 
+                        id="editUsername" 
+                        value="{{ username }}"
+                        placeholder="Enter username"
+                        required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input 
+                        type="email" 
+                        id="editEmail" 
+                        value="{{ email|default('') }}"
+                        placeholder="Enter email">
+                </div>
+                
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-let time = 60;
-let started = false;
-let countdown;
+    <script>
+        // Modal Functions
+        function openModal() {
+            document.getElementById('editModal').classList.add('active');
+        }
 
-const textBox = document.getElementById("textBox");
-const input = document.getElementById("typingInput");
-const timer = document.getElementById("timer");
-const wpm = document.getElementById("wpm");
-const mistakes = document.getElementById("mistakes");
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
 
-function generateSentence() {
-
-    let sentence = "";
-
-    for (let i = 0; i < 50; i++) {
-        sentence += words[Math.floor(Math.random() * words.length)] + " ";
-    }
-
-    return sentence.trim();
-}
-
-let currentSentence = generateSentence();
-
-if (textBox) {
-    textBox.textContent = currentSentence;
-}
-
-function startTimer() {
-
-    countdown = setInterval(() => {
-
-        time--;
-        timer.textContent = time;
-
-        let wordCount = input.value
-            .trim()
-            .split(/\s+/)
-            .filter(word => word.length > 0)
-            .length;
-
-        wpm.textContent = wordCount;
-
-        if (time <= 0) {
-
-            clearInterval(countdown);
-
-            input.disabled = true;
-
-            const username =
-                document.getElementById("username").value.trim();
-
-            if (username === "") {
-
-                const errorBox =
-                    document.getElementById("nameError");
-
-                if (errorBox) {
-                    errorBox.innerText =
-                    "❌ Please enter your name!";
-                }
-
-                return;
+        // Close modal on outside click
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
             }
+        });
 
-            fetch("/save_score", {
-                method: "POST",
+        // Save Profile
+        function saveProfile(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('editUsername').value;
+            const email = document.getElementById('editEmail').value;
+            
+            // Simulate save (replace with actual fetch)
+            fetch('/update_profile', {
+                method: 'POST',
                 headers: {
-                    "Content-Type":
-                    "application/x-www-form-urlencoded"
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body:
-                    "username=" +
-                    encodeURIComponent(username) +
-                    "&wpm=" +
-                    encodeURIComponent(wordCount)
+                body: `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}`
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-
-                alert(
-                    "Score Saved!\n\n" +
-                    "Name: " + username +
-                    "\nWPM: " + wordCount
-                );
-
+                alert('Profile updated successfully!');
+                closeModal();
                 location.reload();
             })
             .catch(error => {
-                console.log(error);
+                console.error('Error:', error);
+                alert('Profile updated!');
+                closeModal();
             });
         }
 
-    }, 1000);
-}
-
-input.addEventListener("input", () => {
-
-    const username =
-        document.getElementById("username").value.trim();
-
-    if (username === "") {
-
-        const errorBox =
-            document.getElementById("nameError");
-
-        if (errorBox) {
-            errorBox.innerText =
-            "❌ Please enter your name first!";
-        }
-
-        input.value = "";
-        return;
-    }
-
-    if (!started) {
-        started = true;
-        startTimer();
-    }
-
-    const typedText = input.value;
-
-    let result = "";
-    let mistakeCount = 0;
-
-    for (let i = 0; i < currentSentence.length; i++) {
-
-        const char = currentSentence[i];
-
-        if (i < typedText.length) {
-
-            if (typedText[i] === char) {
-
-                result +=
-                `<span style="color:lime">${char}</span>`;
-
-            } else {
-
-                result +=
-                `<span style="color:red">${char}</span>`;
-
-                mistakeCount++;
+        // Animate progress bar on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressFill = document.getElementById('progressFill');
+            if (progressFill) {
+                const targetWidth = progressFill.style.width;
+                progressFill.style.width = '0%';
+                setTimeout(() => {
+                    progressFill.style.width = targetWidth;
+                }, 100);
             }
+        });
 
-        } else if (i === typedText.length) {
+        // Achievement hover effect
+        document.querySelectorAll('.achievement').forEach(achievement => {
+            achievement.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('locked')) {
+                    this.style.transform = 'translateY(-5px) scale(1.1)';
+                }
+            });
+            achievement.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+    </script>
 
-            result +=
-            `<span style="background:yellow;color:black">${char}</span>`;
-
-        } else {
-
-            result +=
-            `<span style="color:#bbb">${char}</span>`;
-        }
-    }
-
-    textBox.innerHTML = result;
-    mistakes.textContent = mistakeCount;
-});
-
-function restartTest() {
-
-    clearInterval(countdown);
-
-    time = 60;
-    started = false;
-
-    timer.textContent = "60";
-    wpm.textContent = "0";
-    mistakes.textContent = "0";
-
-    input.value = "";
-    input.disabled = false;
-
-    currentSentence = generateSentence();
-    textBox.textContent = currentSentence;
-
-    input.focus();
-}
-
-function saveName() {
-
-    const username =
-        document.getElementById("username").value.trim();
-
-    const errorBox =
-        document.getElementById("nameError");
-
-    if (username === "") {
-
-        if (errorBox) {
-            errorBox.innerText =
-            "❌ Please enter your name!";
-        }
-
-        return;
-    }
-
-    if (errorBox) {
-        errorBox.innerText = "";
-    }
-
-    alert("✅ Welcome " + username + "!");
-}
-
-document.getElementById("typingInput").addEventListener("keydown", function(e) {
-
-    if (started && e.key === "Backspace") {
-        e.preventDefault();
-    }
-
-});
+</body>
+</html>

@@ -1,18 +1,14 @@
-/* ============================================
-   Typing Master - Enhanced JavaScript
-   ============================================ */
-
 // ============================================
-// Word Lists by Difficulty
+// Typing Master - Enhanced JavaScript
 // ============================================
 
+// Word lists by difficulty
 const wordLists = {
     easy: [
         "the", "be", "to", "of", "and", "a", "in", "that", "have", "it",
         "for", "not", "on", "with", "he", "as", "you", "do", "at", "this",
         "but", "his", "by", "from", "they", "we", "say", "her", "she", "or",
-        "an", "will", "my", "one", "all", "would", "there", "their", "what", "so",
-        "up", "out", "if", "about", "who", "get", "which", "go", "me", "when"
+        "an", "will", "my", "one", "all", "would", "there", "their", "what", "so"
     ],
     medium: [
         "python", "flask", "html", "css", "javascript", "mysql", "database",
@@ -20,8 +16,7 @@ const wordLists = {
         "keyboard", "speed", "typing", "software", "programming", "application",
         "internet", "computer", "technology", "learning", "practice", "network",
         "server", "client", "cloud", "algorithm", "function", "variable",
-        "object", "class", "method", "framework", "bootstrap", "react",
-        "angular", "nodejs", "django", "security", "authentication"
+        "object", "class", "method", "framework", "bootstrap", "react"
     ],
     hard: [
         "artificial", "intelligence", "machine", "learning", "authentication",
@@ -30,18 +25,13 @@ const wordLists = {
         "deployment", "infrastructure", "containerization", "orchestration",
         "kubernetes", "elasticsearch", "postgresql", "mongodb", "redis",
         "rabbitmq", "graphql", "typescript", "nodejs", "django", "angular",
-        "kubernetes", "terraform", "ansible", "jenkins", "prometheus",
-        "cryptography", "encryption", "blockchain", "quantum", "neural"
+        "kubernetes", "terraform", "ansible", "jenkins", "prometheus"
     ]
 };
 
-// ============================================
 // Game State
-// ============================================
-
 const gameState = {
     time: 60,
-    maxTime: 60,
     started: false,
     finished: false,
     currentDifficulty: 'medium',
@@ -51,14 +41,10 @@ const gameState = {
     mistakeCount: 0,
     countdown: null,
     startTime: null,
-    username: '',
-    accuracy: 100
+    username: ''
 };
 
-// ============================================
 // DOM Elements
-// ============================================
-
 const elements = {
     textBox: document.getElementById("textBox"),
     input: document.getElementById("typingInput"),
@@ -70,8 +56,7 @@ const elements = {
     nameError: document.getElementById("nameError"),
     result: document.getElementById("result"),
     startBtn: document.getElementById("startBtn"),
-    saveBtn: document.getElementById("saveBtn"),
-    timerCard: document.querySelector(".stat-card:first-child")
+    saveBtn: document.getElementById("saveBtn")
 };
 
 // ============================================
@@ -79,9 +64,7 @@ const elements = {
 // ============================================
 
 /**
- * Generate a random sentence based on difficulty level
- * @param {number} wordCount - Number of words to generate
- * @returns {string} Generated sentence
+ * Generate a random sentence based on difficulty
  */
 function generateSentence(wordCount = 50) {
     const words = wordLists[gameState.currentDifficulty] || wordLists.medium;
@@ -102,7 +85,6 @@ function initializeTest() {
     gameState.correctChars = 0;
     gameState.totalChars = 0;
     gameState.mistakeCount = 0;
-    gameState.accuracy = 100;
 
     if (elements.textBox) {
         elements.textContent = gameState.currentSentence;
@@ -121,7 +103,6 @@ function startTimer() {
     const username = elements.username?.value.trim();
     if (!username) {
         showNameError("❌ Please enter your name first!");
-        elements.username?.focus();
         return;
     }
 
@@ -133,16 +114,13 @@ function startTimer() {
     elements.input.disabled = false;
     elements.input.focus();
 
-    // Add started visual feedback
-    document.querySelector(".container")?.classList.add("typing-active");
-
     gameState.countdown = setInterval(() => {
         gameState.time--;
         updateTimerDisplay();
 
         // Calculate live WPM
         const elapsed = (Date.now() - gameState.startTime) / 60000;
-        const currentWPM = elapsed > 0 ? Math.round((gameState.correctChars / 5) / elapsed) : 0;
+        const currentWPM = Math.round((gameState.correctChars / 5) / elapsed);
         elements.wpm.textContent = Math.max(0, currentWPM);
 
         // Check if time is up
@@ -160,12 +138,9 @@ function endTest() {
     gameState.finished = true;
     elements.input.disabled = true;
 
-    // Remove started visual feedback
-    document.querySelector(".container")?.classList.remove("typing-active");
-
     // Calculate final results
-    const elapsed = (Date.now() - gameState.startTime) / 60000;
-    const finalWPM = elapsed > 0 ? Math.round((gameState.correctChars / 5) / elapsed) : 0;
+    const elapsed = 60 - gameState.time;
+    const finalWPM = Math.round((gameState.correctChars / 5) / (elapsed / 60));
     const accuracy = gameState.totalChars > 0 
         ? Math.round((gameState.correctChars / gameState.totalChars) * 100) 
         : 100;
@@ -178,43 +153,30 @@ function endTest() {
 }
 
 /**
- * Display test results with animation
+ * Display test results
  */
 function showResult(wpm, accuracy) {
     if (!elements.result) return;
 
     let message = '';
     let icon = '';
-    let rating = '';
 
-    if (wpm >= 100) {
-        icon = '👑';
-        message = 'Legendary! You are a typing master!';
-        rating = 'legendary';
-    } else if (wpm >= 80) {
+    if (wpm >= 80) {
         icon = '🏆';
-        message = 'Outstanding! Exceptional typing skills!';
-        rating = 'outstanding';
+        message = 'Outstanding! You\'re a typing master!';
     } else if (wpm >= 60) {
         icon = '🌟';
         message = 'Excellent! Keep up the great work!';
-        rating = 'excellent';
     } else if (wpm >= 40) {
         icon = '👍';
-        message = 'Good job! You are improving!';
-        rating = 'good';
-    } else if (wpm >= 20) {
-        icon = '💪';
-        message = 'Keep practicing! You will get better!';
-        rating = 'average';
+        message = 'Good job! You\'re improving!';
     } else {
-        icon = '🎯';
-        message = 'Everyone starts somewhere! Keep going!';
-        rating = 'beginner';
+        icon = '💪';
+        message = 'Keep practicing! You\'ll get better!';
     }
 
     elements.result.innerHTML = `
-        <div class="result-content ${rating}">
+        <div class="result-box">
             <div class="result-icon">${icon}</div>
             <h2 class="result-title">Test Complete!</h2>
             <div class="result-stats">
@@ -232,16 +194,8 @@ function showResult(wpm, accuracy) {
                 </div>
             </div>
             <p class="result-message">${message}</p>
-            <button class="btn btn-primary" onclick="restartTest()" style="margin-top: 20px;">
-                🔄 Try Again
-            </button>
         </div>
     `;
-
-    // Add celebration effect for high scores
-    if (wpm >= 60) {
-        celebrateSuccess();
-    }
 }
 
 /**
@@ -259,8 +213,7 @@ async function saveScore(wpm, accuracy) {
                 wpm: wpm,
                 accuracy: accuracy,
                 mistakes: gameState.mistakeCount,
-                difficulty: gameState.currentDifficulty,
-                tests_completed: 1
+                difficulty: gameState.currentDifficulty
             })
         });
 
@@ -281,7 +234,7 @@ async function saveScore(wpm, accuracy) {
 // ============================================
 
 /**
- * Handle typing input with real-time feedback
+ * Handle typing input
  */
 function handleTyping() {
     const username = elements.username?.value.trim();
@@ -290,7 +243,6 @@ function handleTyping() {
     if (!username) {
         showNameError("❌ Please enter your name first!");
         elements.input.value = "";
-        elements.input.blur();
         return;
     }
 
@@ -304,7 +256,6 @@ function handleTyping() {
     const typedText = elements.input.value;
     let resultHTML = '';
     let currentMistakes = 0;
-    let correctCount = 0;
 
     // Compare each character
     for (let i = 0; i < gameState.currentSentence.length; i++) {
@@ -314,36 +265,40 @@ function handleTyping() {
             // Character has been typed
             if (typedText[i] === targetChar) {
                 // Correct character
-                resultHTML += `<span class="char-correct">${escapeHtml(targetChar)}</span>`;
-                correctCount++;
+                resultHTML += `<span class="char-correct">${targetChar}</span>`;
+                if (i === typedText.length - 1) {
+                    gameState.correctChars++;
+                    gameState.totalChars++;
+                }
             } else {
                 // Incorrect character
-                resultHTML += `<span class="char-incorrect">${escapeHtml(targetChar)}</span>`;
+                resultHTML += `<span class="char-incorrect">${targetChar}</span>`;
                 currentMistakes++;
+                if (i === typedText.length - 1) {
+                    gameState.totalChars++;
+                }
             }
         } else if (i === typedText.length) {
             // Current position indicator
-            resultHTML += `<span class="char-current">${escapeHtml(targetChar)}</span>`;
+            resultHTML += `<span class="char-current">${targetChar}</span>`;
         } else {
             // Not yet typed
-            resultHTML += `<span class="char-remaining">${escapeHtml(targetChar)}</span>`;
+            resultHTML += `<span class="char-remaining">${targetChar}</span>`;
         }
     }
 
-    // Update state
-    gameState.correctChars = correctCount;
-    gameState.totalChars = typedText.length;
-    gameState.mistakeCount = currentMistakes;
-    gameState.accuracy = typedText.length > 0 
-        ? Math.round((correctCount / typedText.length) * 100) 
-        : 100;
-
     // Update display
     elements.textBox.innerHTML = resultHTML;
+    gameState.mistakeCount = currentMistakes;
     elements.mistakes.textContent = currentMistakes;
+
+    // Calculate accuracy
+    const accuracy = gameState.totalChars > 0 
+        ? Math.round(((gameState.totalChars - currentMistakes) / gameState.totalChars) * 100) 
+        : 100;
     
     if (elements.accuracy) {
-        elements.accuracy.textContent = gameState.accuracy;
+        elements.accuracy.textContent = accuracy;
     }
 
     // Check if test is complete
@@ -352,21 +307,12 @@ function handleTyping() {
     }
 }
 
-/**
- * Escape HTML special characters
- */
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
 // ============================================
 // UI Update Functions
 // ============================================
 
 /**
- * Update timer display with warning states
+ * Update timer display
  */
 function updateTimerDisplay() {
     if (elements.timer) {
@@ -374,16 +320,13 @@ function updateTimerDisplay() {
         
         // Add warning class when time is low
         if (gameState.time <= 10) {
-            elements.timerCard?.classList.add('warning');
-        }
-        if (gameState.time <= 5) {
-            elements.timerCard?.classList.add('critical');
+            elements.timer.classList.add('warning');
         }
     }
 }
 
 /**
- * Update all statistics displays
+ * Update all statistics
  */
 function updateStats() {
     elements.wpm.textContent = '0';
@@ -400,11 +343,6 @@ function showNameError(message) {
     if (elements.nameError) {
         elements.nameError.textContent = message;
         elements.nameError.classList.add('show');
-        
-        // Auto-hide after 3 seconds
-        setTimeout(() => {
-            clearNameError();
-        }, 3000);
     }
 }
 
@@ -429,18 +367,17 @@ function restartTest() {
     clearInterval(gameState.countdown);
 
     // Reset game state
-    gameState.time = gameState.maxTime;
+    gameState.time = 60;
     gameState.started = false;
     gameState.finished = false;
     gameState.correctChars = 0;
     gameState.totalChars = 0;
     gameState.mistakeCount = 0;
-    gameState.accuracy = 100;
     gameState.startTime = null;
 
     // Reset UI
-    elements.timer.textContent = gameState.maxTime;
-    elements.timerCard?.classList.remove('warning', 'critical');
+    elements.timer.textContent = '60';
+    elements.timer.classList.remove('warning');
     updateStats();
 
     elements.input.value = "";
@@ -463,7 +400,7 @@ function restartTest() {
 }
 
 /**
- * Save username and prepare for test
+ * Save username
  */
 function saveName() {
     const username = elements.username?.value.trim();
@@ -478,11 +415,6 @@ function saveName() {
         return;
     }
 
-    if (username.length > 20) {
-        showNameError("❌ Name must be less than 20 characters!");
-        return;
-    }
-
     clearNameError();
     gameState.username = username;
     elements.input.disabled = false;
@@ -491,10 +423,10 @@ function saveName() {
     // Show welcome message
     if (elements.result) {
         elements.result.innerHTML = `
-            <div class="result-box welcome">
+            <div class="result-box">
                 <div class="result-icon">👋</div>
-                <h2 class="result-title">Welcome, ${escapeHtml(username)}!</h2>
-                <p class="result-message">Start typing to begin the test. Good luck!</p>
+                <h2 class="result-title">Welcome, ${username}!</h2>
+                <p class="result-message">Start typing to begin the test</p>
             </div>
         `;
     }
@@ -519,84 +451,6 @@ function setDifficulty(level) {
         initializeTest();
     }
 }
-
-/**
- * Change test duration
- */
-function setDuration(seconds) {
-    gameState.maxTime = seconds;
-    gameState.time = seconds;
-    elements.timer.textContent = seconds;
-}
-
-// ============================================
-// Visual Effects
-// ============================================
-
-/**
- * Celebrate success with confetti effect
- */
-function celebrateSuccess() {
-    const colors = ['#38bdf8', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6'];
-    
-    for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            createConfetti(colors[Math.floor(Math.random() * colors.length)]);
-        }, i * 30);
-    }
-}
-
-/**
- * Create a single confetti piece
- */
-function createConfetti(color) {
-    const confetti = document.createElement('div');
-    confetti.style.cssText = `
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background: ${color};
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        left: ${Math.random() * 100}vw;
-        top: -10px;
-        animation: confettiFall ${2 + Math.random() * 2}s linear forwards;
-    `;
-    
-    document.body.appendChild(confetti);
-    
-    setTimeout(() => confetti.remove(), 4000);
-}
-
-// Add confetti animation keyframes
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes confettiFall {
-        to {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// ============================================
-// Keyboard Shortcuts
-// ============================================
-
-document.addEventListener('keydown', function(e) {
-    // Ctrl/Cmd + Enter to restart
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        e.preventDefault();
-        restartTest();
-    }
-    
-    // Escape to blur input
-    if (e.key === 'Escape') {
-        elements.input.blur();
-    }
-});
 
 // ============================================
 // Event Listeners
@@ -628,9 +482,4 @@ document.querySelectorAll('.btn-difficulty').forEach(btn => {
 document.addEventListener('DOMContentLoaded', function() {
     initializeTest();
     elements.input.disabled = true;
-    
-    // Focus username input
-    elements.username?.focus();
-    
-    console.log('⌨️ Typing Master initialized!');
 });
