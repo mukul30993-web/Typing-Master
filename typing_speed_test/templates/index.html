@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Improve your typing speed and accuracy with Typing Master - the ultimate typing practice platform">
+    <title>Typing Master - Improve Your Typing Speed</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌨️</text></svg>">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo">
+            <span class="logo-icon">⌨</span>
+            <span class="logo-text">Typing Master</span>
+        </div>
+
+        <button class="mobile-menu-btn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-links">
+            <a href="/" class="nav-link active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="/profile" class="nav-link">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+            <a href="/leaderboard" class="nav-link">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+            <a href="/login" class="nav-link">
+                <span class="nav-icon">🔑</span>
+                <span class="nav-text">Login</span>
+            </a>
+            <a href="/logout" class="nav-link logout">
+                <span class="nav-icon">🚪</span>
+                <span class="nav-text">Logout</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="container" role="main">
+        
+        <header class="header-section">
+            <h1 class="main-title">
+                <span class="title-icon">⌨️</span>
+                Typing Master
+            </h1>
+            <p class="subtitle">Master your typing skills with practice and precision</p>
+        </header>
+
+        <!-- Username Input Section -->
+        <section class="user-section" aria-label="User information">
+            <div class="input-group">
+                <label for="username" class="sr-only">Your Name</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="Enter Your Name" 
+                    autocomplete="off"
+                    maxlength="20"
+                    aria-describedby="nameError">
+                <button 
+                    type="button" 
+                    onclick="saveName()"
+                    class="btn btn-primary"
+                    id="startBtn">
+                    <span class="btn-icon">✅</span>
+                    <span class="btn-text">Start Practice</span>
+                </button>
+            </div>
+            <p id="nameError" class="error-message" role="alert" aria-live="polite"></p>
+        </section>
+
+        <!-- Difficulty Selection -->
+        <section class="difficulty-section" aria-label="Difficulty selection">
+            <h2 class="section-title">Select Difficulty</h2>
+            <div class="difficulty-buttons">
+                <button class="btn btn-difficulty active" data-level="easy">
+                    🌱 Easy
+                </button>
+                <button class="btn btn-difficulty" data-level="medium">
+                    🌿 Medium
+                </button>
+                <button class="btn btn-difficulty" data-level="hard">
+                    🌳 Hard
+                </button>
+            </div>
+        </section>
+
+        <!-- Text Display Box -->
+        <section class="typing-section" aria-label="Typing practice area">
+            <div id="textBox" class="text-box" role="region" aria-label="Text to type">
+                <p class="loading-text">Loading text...</p>
+            </div>
+
+            <!-- Typing Input Area -->
+            <div class="input-area">
+                <label for="typingInput" class="sr-only">Typing area</label>
+                <textarea 
+                    id="typingInput" 
+                    rows="6" 
+                    placeholder="Start typing here when you're ready..."
+                    autocomplete="off"
+                    spellcheck="false"
+                    disabled
+                    aria-describedby="typingHelp"></textarea>
+                <p id="typingHelp" class="help-text">Type the text above as accurately and quickly as possible</p>
+            </div>
+        </
